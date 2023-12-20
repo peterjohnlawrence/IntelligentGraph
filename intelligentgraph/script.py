@@ -1,6 +1,8 @@
 from rdflib.namespace import Namespace,DefinedNamespace
-from rdflib import Graph, URIRef, term
-from typing import Generator ,Tuple,Optional
+from rdflib import Graph, ConjunctiveGraph, Dataset, Literal, URIRef, term
+from rdflib.paths import Path
+from rdflib.term import Node
+from typing import Generator ,Tuple,Optional,Union ,List
 
 _SubjectType = Node
 _PredicateType = Node
