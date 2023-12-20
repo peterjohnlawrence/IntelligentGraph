@@ -6,6 +6,9 @@ from rdflib.paths import Path
 from rdflib.term import Node
 from typing import Generator ,Tuple,Optional,Union ,List
 
+from intelligentgraph.graph import IntelligentConjunctiveGraph, IntelligentDataset, IntelligentGraph
+from intelligentgraph.script import SCRIPT
+
 _SubjectType = Node
 _PredicateType = Node
 _ObjectType = Node
