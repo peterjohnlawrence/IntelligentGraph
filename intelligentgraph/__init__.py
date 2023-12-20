@@ -1,7 +1,4 @@
-__all__ = ['graph','script']
-
-import graph
-import script
+__all__ = ["graph","script"]
 
 from rdflib.namespace import Namespace,DefinedNamespace
 from rdflib import Graph, ConjunctiveGraph, Dataset, Literal, URIRef, term
