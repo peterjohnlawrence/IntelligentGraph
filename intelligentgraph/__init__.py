@@ -38,4 +38,4 @@ _TriplePatternType = Tuple[
     Optional["_SubjectType"], Optional["_PredicateType"], Optional["_ObjectType"]
 ]
 
-_ContextType = Graph
+#_ContextType = Graph
