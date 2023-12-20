@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup,find_packages
 
 setup(
     name='IntelligentGraph',
@@ -8,7 +8,7 @@ setup(
     author='Peter Lawrence',
     author_email='peter.lawrence@inova8.com',
     license='Apache License 2.0',
-    packages=['IntelligentGraph','SCRIPT'],
+    packages=find_packages(),
     install_requires=['RDFLib>=7.0',             
                       ],
 
