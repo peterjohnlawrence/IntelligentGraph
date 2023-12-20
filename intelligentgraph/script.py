@@ -8,6 +8,7 @@ _SubjectType = Node
 _PredicateType = Node
 _ObjectType = Node
 _TripleType = Tuple["_SubjectType", "_PredicateType", "_ObjectType"]
+_ContextType =Graph
 _TripleSelectorType = Tuple[
     Optional["_SubjectType"],
     Optional[Union["Path", "_PredicateType"]],
