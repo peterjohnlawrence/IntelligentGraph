@@ -1,3 +1,8 @@
+from rdflib.namespace import Namespace,DefinedNamespace
+from rdflib import Graph, URIRef, term
+from typing import Generator ,Tuple,Optional
+
+
 class SCRIPT(DefinedNamespace):
   """
   SCRIPT vocabulary
