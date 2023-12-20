@@ -1,9 +1,10 @@
+from intelligentgraph.script import SCRIPT
+
 from rdflib.namespace import Namespace,DefinedNamespace
 from rdflib import Graph, ConjunctiveGraph, Dataset, Literal, URIRef, term
 from rdflib.paths import Path
 from rdflib.term import Node
 from typing import Generator ,Tuple,Optional,Union ,List
-from intelligentgraph.script import SCRIPT
 
 _SubjectType = Node
 _PredicateType = Node
