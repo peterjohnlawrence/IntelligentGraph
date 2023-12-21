@@ -1,4 +1,4 @@
-![](https://github.com/Your_Repository_Name/Your_GIF_Name.gif)
+![](IntelligentGraph.diagrams.gif)
 # IntelligentGraph
 Python package that adds IntelligentGraph capabilities to RDFLib RDF graph package.
 
