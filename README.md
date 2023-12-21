@@ -138,9 +138,9 @@ g.serialize(format="n3")
         <http://inova8.com/fascicled>,
         <http://inova8.com/hangers> .
 ```
-# Summary
+## Summary
 
-The asserted graph only contains three statements, each of which  has a script for an object value:
+In this example, the asserted graph only contains three statements, each of which  has a script for an object value:
 ```python
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 <http://inova8.com/ig>
@@ -172,3 +172,21 @@ When queried as an IntelligentGraph, it will appear that the graph contains the 
         <http://inova8.com/fascicled>,
         <http://inova8.com/hangers> .
 ```
+# What next?
+IntelligentGraph opens up all sorts of data analysis capabilities which can now becomne agents within the graph rather than external code.
+
+## Data Analysis
+
+Often data analysis is done within a spreadsheet because it is so easy to add calculated columns, as well as aggregate column values. This can be performed just as easily within the IntelligentGraph:
+
+- Each class is another spreadsheet.
+- Consider each instance of that class or 'entity', aka subject of a triple, as the identity of the row.
+- Each property of the entity then becomes another column.
+- Aggregations are then properties associated with the class of the individual entities
+
+## Integration with IoT and IIoT
+
+Internet of Things (IoT) and Industrial Internet of Things (IIoT) provide a source for all sorts of measurements. However, these IoT and IIoT systems often do not understand the context from which these measurements are taken. A graph model of the plant, building, geographical area, etc is the best way to capture that context. But then we are missing the actual measurements. IntelligentGraph allows agents within the context model to pull information in from the IoT or IIoT server just-in-time, rather than pushing as much information as one can into the graph just-in-case. Since these measurements are available withibn the graph, just like any other asserted triple, analysis agents can also be added to the graph to create a truly intelligent graph.
+
+## Integration with Large Language Models (LLMs)
+
