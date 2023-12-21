@@ -8,6 +8,7 @@ When a SCRIPT-valued object is retrieved from the RDF store, the script is execu
 
 # Documentation
 
+Most of the documentation for IntelligentGraph can be found in RDFlib, see https://rdflib.readthedocs.io for its documentation built from the code. 
 
 # Installation
 The latest release of RDFLib may be installed with Python's package management tool pip. 
@@ -187,7 +188,7 @@ Often data analysis is done within a spreadsheet because it is so easy to add ca
 - Each class is another spreadsheet.
 - Consider each instance of that class or 'entity', aka subject of a triple, as the identity of the row.
 - Each property of the entity then becomes another column.
-- Aggregations are then properties associated with the class of the individual entities
+- Aggregations are the properties associated with the class of the individual entities
 
 ## Integration with IoT and IIoT
 
@@ -195,6 +196,11 @@ Internet of Things (IoT) and Industrial Internet of Things (IIoT) provide a sour
 
 ## Integration with Large Language Models (LLMs)
 
-Clearly, IntelligentGrapoh can pull structured data from external systems such as IoT and merge it with the existing asserted graph. LLM (Large Language Models)  such as ChatGPT, Bard, LLama and others have opened up the possibility of merging unstructured data from the world of LLms with the structure of graphs.
+Clearly, IntelligentGraph can pull structured data from external systems such as IoT and merge it with the existing asserted graph. LLM (Large Language Models)  such as ChatGPT, Bard, LLama and others have opened up the possibility of merging unstructured data from the world of LLms with the structure of graphs.
+
+# Caveats
+- Beware: If a script refers to another script in a circular fashion, you will get a stack overflow!
+- Scripts are evaluated using the Python exec() function. This can open expose you to malicious attacks if you allow open access to your intelligentGraphs.
+- Is IntelligentGraph fully debugged and tested? No, but to the best of my abilities.
 
 
