@@ -33,7 +33,8 @@ from rdflib.namespace import FOAF
 
 g = IntelligentGraph()
 ig = URIRef("http://inova8.com/ig")
-g.add((ig, FOAF.birthday, Literal('''_result =date(1951, 3, 8)''',datatype=SCRIPT.python)))
+g.add((ig, FOAF.birthday, Literal('''from datetime import date
+_result =date(1951, 3, 8)''',datatype=SCRIPT.python)))
 ```
 We can query this graph (with one triple!) as follows:
 ```python
@@ -51,6 +52,7 @@ Note that the object's script value has been replaced with a literal containing 
 If we wanted to know a person's age, we could of course query this graph, and as part of the SPARQL query, or Python code handling the returned values, calculate the age in years. For example 
 ```python
 s = URIRef("http://inova8.com/ig")
+from rdflib.namespace import FOAF
 from datetime import date
 for triple in g.triples( (s , FOAF.birthday, None)):
     age= int((date.today()-triple[2].toPython()).days/365.25)
@@ -71,6 +73,7 @@ Note that the script will be initialized with values as follows:
 
 ```python
 g.add((ig, FOAF.age, Literal('''
+from rdflib.namespace import FOAF
 from datetime import date
 for triple in g.triples( (s , FOAF.birthday, None)):
     age= int((date.today()-triple[2].toPython()).days/365.25)
@@ -93,7 +96,7 @@ Which returns the following graph in n3 format. Again, please note that the scri
 There are many occasions when we want to merge a graph with external information. Usually, this is done by running some code that retrieves the triples from the external data source, such as an IoT server. This data then has to be merged with the underlying graph.
 IntelligentGraph offers a better alternative: add an agent *within* the graph that pulls this external data just-in-time, instead of just-in-case.
 
-Let's start by simulating an external service that returns the FOAF:knows triples about a particular individual. In reality, we will use an external service that generates random names.
+Let's start by simulating an external service that returns the FOAF:knows triples about a particular individual. In reality, we will use an external service (https://random-word-api.herokuapp.com) that generates random names.
 ```python
 s = URIRef("http://inova8.com/ig")
 import requests
@@ -112,7 +115,7 @@ If we were to run this outside of the graph, it would return triples something l
 (rdflib.term.URIRef('http://inova8.com/ig'), rdflib.term.URIRef('http://xmlns.com/foaf/0.1/knows'), rdflib.term.URIRef('http://inova8.com/flyspecking'))
 (rdflib.term.URIRef('http://inova8.com/ig'), rdflib.term.URIRef('http://xmlns.com/foaf/0.1/knows'), rdflib.term.URIRef('http://inova8.com/grooving'))
 ```
-Instead of merging these two graphs, let's add an agent script that returns these results. we use the 'yield' pattern so that a script need not fetch all results. Instead yield allows each value to be fetch on request.:
+Instead of merging these two graphs, let's add an agent script that returns these results. we use the 'yield' pattern so that a script need not fetch all results. Instead, yield allows each value to be fetced on request:
 ```python
 g.add((ig, FOAF.knows, Literal('''
 import requests
@@ -144,13 +147,15 @@ In this example, the asserted graph only contains three statements, each of whic
 ```python
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 <http://inova8.com/ig>
+    foaf:birthday """from datetime import date
+                _result =date(1951, 3, 8)"""^^<http://inova8.com/script/python> ;
     foaf:age """
+                from rdflib.namespace import FOAF
                 from datetime import date
                 for triple in g.triples( (s , FOAF.birthday, None)):
                 age= int((date.today()-triple[2].toPython()).days/365.25)
                 _result = age"""^^<http://inova8.com/script/python> ;
-    foaf:birthday "
-                _result =date(1951, 3, 8)"^^<http://inova8.com/script/python> ;
+
     foaf:knows """
                 import requests
                 def getKnows(individual):
