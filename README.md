@@ -186,7 +186,10 @@ Often data analysis is done within a spreadsheet because it is so easy to add ca
 
 ## Integration with IoT and IIoT
 
-Internet of Things (IoT) and Industrial Internet of Things (IIoT) provide a source for all sorts of measurements. However, these IoT and IIoT systems often do not understand the context from which these measurements are taken. A graph model of the plant, building, geographical area, etc is the best way to capture that context. But then we are missing the actual measurements. IntelligentGraph allows agents within the context model to pull information in from the IoT or IIoT server just-in-time, rather than pushing as much information as one can into the graph just-in-case. Since these measurements are available withibn the graph, just like any other asserted triple, analysis agents can also be added to the graph to create a truly intelligent graph.
+Internet of Things (IoT) and Industrial Internet of Things (IIoT) provide a source for all sorts of measurements. However, these IoT and IIoT systems often do not understand the context from which these measurements are taken. A graph model of the plant, building, geographical area, etc is the best way to capture that context. But then we are missing the actual measurements. IntelligentGraph allows agents within the context model to pull information in from the IoT or IIoT server just-in-time, rather than pushing as much information as one can into the graph just-in-case. Since these measurements are available within the graph, just like any other asserted triple, analysis agents can also be added to the graph to create a truly intelligent graph.
 
 ## Integration with Large Language Models (LLMs)
+
+Clearly, IntelligentGrapoh can pull structured data from external systems such as IoT and merge it with the existing asserted graph. LLM (Large Language Models)  such as ChatGPT, Bard, LLama and others have opened up the possibility of merging unstructured data from the world of LLms with the structure of graphs.
+
 
