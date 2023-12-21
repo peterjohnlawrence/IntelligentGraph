@@ -78,7 +78,7 @@ for triple in g.triples( (s , FOAF.birthday, None)):
 ```
 We can view the calculated graph  using
 ```python
-g.serialize(format="n3")
+print(g.serialize(format="n3"))
 ```
 Which returns the following graph in n3 format. Again, please note that the scripts have been replaced by their calculated equivalent.
 ```python
@@ -124,7 +124,7 @@ _result = getKnows(s)''',datatype=SCRIPT.python)))
 ```
 We can again view the entire graph simply by serializing it as follows:
 ```python
-g.serialize(format="n3")
+print(g.serialize(format="n3"))
 ```
 ```python
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
