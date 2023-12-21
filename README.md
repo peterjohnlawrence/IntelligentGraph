@@ -138,4 +138,37 @@ g.serialize(format="n3")
         <http://inova8.com/fascicled>,
         <http://inova8.com/hangers> .
 ```
+# Summary
 
+The asserted graph only contains three statements, each of which  has a script for an object value:
+```python
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+<http://inova8.com/ig>
+    foaf:age """
+                from datetime import date
+                for triple in g.triples( (s , FOAF.birthday, None)):
+                age= int((date.today()-triple[2].toPython()).days/365.25)
+                _result = age"""^^<http://inova8.com/script/python> ;
+    foaf:birthday "
+                _result =date(1951, 3, 8)"^^<http://inova8.com/script/python> ;
+    foaf:knows """
+                import requests
+                def getKnows(individual):
+                    response = requests.get("https://random-word-api.herokuapp.com/word?lang=en&number=5")
+                    for word in response.json():
+                        yield (individual, FOAF.knows, URIRef("http://inova8.com/"+word)) 
+                _result = getKnows(s)"""^^<http://inova8.com/script/python> .
+```
+When queried as an IntelligentGraph, it will appear that the graph contains the following:
+```python
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://inova8.com/ig> foaf:age 72 ;
+    foaf:birthday "1951-03-08"^^xsd:date ;
+    foaf:knows <http://inova8.com/anthodium>,
+        <http://inova8.com/batts>,
+        <http://inova8.com/exodermises>,
+        <http://inova8.com/fascicled>,
+        <http://inova8.com/hangers> .
+```
