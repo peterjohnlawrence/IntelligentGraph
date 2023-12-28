@@ -60,11 +60,13 @@ class SCRIPT(DefinedNamespace):
   python=URIRef("http://inova8.com/script/python")
   error=URIRef("http://inova8.com/script/error")
 
-  def __init__( self):
-    python_type =self.python
-    error_type =self.error
-    if( self.python not in  term._toPythonMapping): term.bind(self.python, str)
-    if( self.error not in  term._toPythonMapping): term.bind(self.error, str)
+  def __init__( self,*args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        python_type =self.python
+        error_type =self.error
+        if( self.python not in  term._toPythonMapping): term.bind(self.python, str)
+        if( self.error not in  term._toPythonMapping): term.bind(self.error, str)
 
   def _handleReturn(s,p,returnResult):
       if(returnResult is not None ):

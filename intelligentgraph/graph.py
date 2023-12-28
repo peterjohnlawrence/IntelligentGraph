@@ -50,13 +50,12 @@ class Intelligent():
     _enabled = True
     _python=URIRef("http://inova8.com/script/python")
     _error=URIRef("http://inova8.com/script/error")
-    '''
-    def __init__( self):
+    def __init__( self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         python_type =self._python
         error_type =self._error
         if( self._python not in  term._toPythonMapping): term.bind(self._python, str)
         if( self._error not in  term._toPythonMapping): term.bind(self._error, str)
-    '''
     def handleScript(  self,
           triple: _TripleSelectorType,
           _ctx :Optional[_ContextType]=None
@@ -85,14 +84,6 @@ class IntelligentGraph(Intelligent, Graph):
 
     In the event of a script execution error, the error message os returned as the literal value of the object with datatype SCRIPT.error
     """
-
-    def __init__( self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        python_type =self._python
-        error_type =self._error
-        if( self._python not in  term._toPythonMapping): term.bind(self._python, str)
-        if( self._error not in  term._toPythonMapping): term.bind(self._error, str)
-
     def triples(
             self,
             triple: _TripleSelectorType,
@@ -118,13 +109,6 @@ class IntelligentGraph(Intelligent, Graph):
 #_ContextType = IntelligentGraph
 
 class IntelligentConjunctiveGraph(Intelligent,ConjunctiveGraph):
-    def __init__( self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        python_type =self._python
-        error_type =self._error
-        if( self._python not in  term._toPythonMapping): term.bind(self._python, str)
-        if( self._error not in  term._toPythonMapping): term.bind(self._error, str)
-
     def triples(
         self,
         triple_or_quad: _TripleOrQuadSelectorType,
