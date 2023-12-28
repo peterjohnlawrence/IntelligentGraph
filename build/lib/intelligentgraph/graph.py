@@ -53,16 +53,6 @@ class IntelligentGraph(Graph):
 
   In the event of a script execution error, the error message os returned as the literal value of the object with datatype SCRIPT.error
   """
-  def handleScript(  self,
-          triple: _TripleSelectorType,
-          _ctx :Optional[_ContextType]=None
-      ) :
-    for s, p, o  in SCRIPT.scriptEvaluator(self,triple=triple,_ctx= _ctx ):
-        if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)):
-            self.handleScript(triple=(s,p,o),_ctx=_ctx )
-        else:
-            yield  (s, p, o )
-
   def triples(
           self,
           triple: _TripleSelectorType,
@@ -80,23 +70,15 @@ class IntelligentGraph(Graph):
             for (_s, _p, _o), cg in self.store.triples((s, p, o), context=self):
               # __store not visible so replaced with store
               if (isinstance(_o, Literal) and (_o.datatype ==  SCRIPT.python)): 
-                for (ss,pp,oo) in self.handleScript((_s, _p, _o)):
-                    yield (ss,pp,oo)
+                for ss,pp,oo in  SCRIPT.scriptEvaluator(self, _s, _p, _o):
+                  yield ss,pp,oo
+
               else:
                 yield _s, _p, _o
 
 #_ContextType = IntelligentGraph
 
 class IntelligentConjunctiveGraph(ConjunctiveGraph):
-    def handleScript(  self,
-          triple: _TripleSelectorType,
-          _ctx :Optional[_ContextType]=None
-      ) :
-        for s, p, o  in SCRIPT.scriptEvaluator(self,triple=triple,_ctx= _ctx ):
-            if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)):
-                self.handleScript(triple=(s,p,o),_ctx=_ctx )
-            else:
-                yield  (s, p, o )
     def triples(
         self,
         triple_or_quad: _TripleOrQuadSelectorType,
@@ -129,8 +111,9 @@ class IntelligentConjunctiveGraph(ConjunctiveGraph):
         else:
             for (s, p, o), cg in self.store.triples((s, p, o), context=context):
               if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)): 
-                for (ss,pp,oo) in self.handleScript(( s, p, o),cg):
-                    yield (ss,pp,oo)
+                for ss,pp,oo in  SCRIPT.scriptEvaluator(self, s, p, o,cg):
+                  yield ss,pp,oo
+
               else:
                 yield s, p, o
 
@@ -144,9 +127,10 @@ class IntelligentConjunctiveGraph(ConjunctiveGraph):
         for (s, p, o), cg in self.store.triples((s, p, o), context=c):
             for ctx in cg:
               #yield s, p, o, ctx
-              if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)):
-                for (ss,pp,oo) in self.handleScript(( s, p, o),ctx):
-                    yield (ss,pp,oo) 
+              if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)): 
+                for ss,pp,oo in  SCRIPT.scriptEvaluator(self, s, p, o, ctx):
+                  yield ss,pp,oo,ctx
+
               else:
                 yield s, p, o, ctx
 
@@ -169,9 +153,11 @@ class IntelligentConjunctiveGraph(ConjunctiveGraph):
         # type error: Argument 1 to "triples_choices" of "Store" has incompatible type "Tuple[Union[List[Node], Node], Union[Node, List[Node]], Union[Node, List[Node]]]"; expected "Union[Tuple[List[Node], Node, Node], Tuple[Node, List[Node], Node], Tuple[Node, Node, List[Node]]]"
         # type error note: unpacking discards type info
         for (s1, p1, o1), cg in self.store.triples_choices((s, p, o), context=context):  # type: ignore[arg-type]
+            #yield s1, p1, o1
             if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)): 
-                for (ss,pp,oo) in self.handleScript((s1, p1, o1),cg):
-                    yield (ss,pp,oo) 
+              for ss,pp,oo in  SCRIPT.scriptEvaluator(self, s1, p1, o1,cg):
+                yield ss,pp,oo
+
             else:
               yield s1, p1, o1
 

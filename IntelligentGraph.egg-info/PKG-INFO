@@ -1,0 +1,17 @@
+Metadata-Version: 2.1
+Name: IntelligentGraph
+Version: 0.9.0
+Summary: Python package that adds IntelligentGraph capabilities to RDFLib RDF graph package
+Home-page: https://https://github.com/peterjohnlawrence/IntelligentGraph
+Author: Peter Lawrence
+Author-email: peter.lawrence@inova8.com
+License: Apache License 2.0
+Classifier: Development Status :: 1 - Planning
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+License-File: LICENSE
+Requires-Dist: RDFLib>=7.0

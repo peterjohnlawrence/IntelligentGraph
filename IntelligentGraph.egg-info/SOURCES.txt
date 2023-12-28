@@ -1,0 +1,11 @@
+LICENSE
+README.md
+setup.py
+IntelligentGraph.egg-info/PKG-INFO
+IntelligentGraph.egg-info/SOURCES.txt
+IntelligentGraph.egg-info/dependency_links.txt
+IntelligentGraph.egg-info/requires.txt
+IntelligentGraph.egg-info/top_level.txt
+intelligentgraph/__init__.py
+intelligentgraph/graph.py
+intelligentgraph/script.py

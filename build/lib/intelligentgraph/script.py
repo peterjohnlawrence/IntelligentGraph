@@ -101,9 +101,8 @@ class SCRIPT(DefinedNamespace):
       yield s, p ,Literal("Error=Script does assign _return value or value assigned is None. \nCode ="+ str(o), datatype=SCRIPT.error)  
     
 
-  def scriptEvaluator(self,  triple: _TriplePatternType,  _ctx :Optional[_ContextType]=None):
-    resultGenerator = next(SCRIPT._eval(self,triple=triple), _ctx)
-    (_s,_p,_o)=triple
+  def scriptEvaluator(self, _s, _p, _o,  _ctx :Optional[_ContextType]=None):
+    resultGenerator = next(SCRIPT._eval(self,triple=(_s, _p, _o)), _ctx)
     if(isinstance(resultGenerator,Generator)):
       try:
         #for ( _es, _ep, _eo) in resultGenerator:
