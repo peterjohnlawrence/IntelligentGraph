@@ -60,7 +60,7 @@ class Intelligent():
           triple: _TripleSelectorType,
           _ctx :Optional[_ContextType]=None
       ) :
-        for s, p, o  in SCRIPT.scriptEvaluator(self,triple=triple,_ctx= _ctx ):
+        for s, p, o  in self.scriptEvaluator(triple=triple,_ctx= _ctx ):
             if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)):
                 self.handleScript(triple=(s,p,o),_ctx=_ctx )
             else:
@@ -71,7 +71,63 @@ class Intelligent():
         self._enabled = True 
     def isEnabled(self):
        return self._enabled
-    
+    def _handleReturn(s,p,returnResult):
+        if(returnResult is not None ):
+            if(isinstance(returnResult ,Generator)):
+                yield returnResult
+            elif(isinstance(returnResult ,term.Node)):
+                yield s, p , returnResult
+            else:
+                yield s, p ,Literal(returnResult)     
+        else:
+            yield s, p ,Literal("Error=Script does not return _return value", datatype=SCRIPT.error)  
+
+    def _eval(  self,
+        triple: _TriplePatternType,
+        ctx :Optional[_ContextType]=None
+    ) -> Generator["_TripleType", None, None]:
+        s, p, o = triple
+        inputs = globals()
+        inputs['g']=self
+        inputs['s']=s
+        inputs['p']=p
+        inputs['o']=o
+        inputs['ctx']=ctx
+        result= globals()
+        result['_result']=None
+        try:
+            exec(o,inputs,result)
+        except BaseException as err:
+            yield s, p ,Literal("Error="+str(err)+ "\nCode = "+ str(o), datatype=SCRIPT.error)  
+        #yield SCRIPT.handleReturn(s,p,result['_result'])
+        if(result['_result'] is not None ):
+            if(isinstance(result['_result'] ,Generator)):
+                yield result['_result']
+            elif(isinstance(result['_result'] ,term.Node)):
+                yield s, p , result['_result']
+            else:
+                yield s, p ,Literal(result['_result'])     
+        else:
+            yield s, p ,Literal("Error=Script does assign _return value or value assigned is None. \nCode ="+ str(o), datatype=SCRIPT.error)  
+
+
+    def scriptEvaluator(self,  triple: _TriplePatternType,  _ctx :Optional[_ContextType]=None):
+        resultGenerator = next(self._eval(triple=triple), _ctx)
+        (_s,_p,_o)=triple
+        if(isinstance(resultGenerator,Generator)):
+            try: 
+                for triple in resultGenerator:
+                    if (isinstance(triple, tuple)):
+                        if ( isinstance(triple[0],term.Node) and isinstance(triple[1],term.Node) and isinstance(triple[2],term.Node) ):
+                            yield triple
+                        else:
+                            yield _s, _p ,Literal("Error=tuple but not all elements are term.Node"+ "\nCode = "+ str(_o), datatype=SCRIPT.error)
+                    else:
+                        yield _s, _p ,Literal("Error=incomplete tuple"+ "\nCode = "+ str(_o), datatype=SCRIPT.error)
+            except BaseException as err:  
+                yield _s, _p ,Literal("Error="+str(err)+ "\nCode = "+ str(_o), datatype=SCRIPT.error)  
+        else:
+            yield resultGenerator   
 class IntelligentGraph(Intelligent, Graph):
     """An Intelligent RDF Graph, inherited from Graph
 
