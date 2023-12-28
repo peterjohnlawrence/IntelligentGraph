@@ -15,6 +15,16 @@ def test_simpleLiteral():
         assert triple[1]==FOAF.birthday
         assert triple[2].toPython() ==1952
 
+def test_simpleLiteralwoIntelligence():
+    g = IntelligentConjunctiveGraph()
+    ig = URIRef("http://inova8.com/ig")
+    g.add((ig, FOAF.birthday, Literal('1952',datatype=SCRIPT.python)))
+    g.disableIntelligence()
+    for triple in g.triples( (None , None, None)):
+        assert triple[0]==URIRef("http://inova8.com/ig")
+        assert triple[1]==FOAF.birthday
+        assert triple[2] ==Literal('1952',datatype=SCRIPT.python)
+
 def test_simpleDatetime():
     g = IntelligentConjunctiveGraph()
     ig = URIRef("http://inova8.com/ig")

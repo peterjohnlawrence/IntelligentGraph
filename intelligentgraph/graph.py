@@ -46,54 +46,17 @@ _QuadPatternType = Tuple[
     Optional["_ObjectType"],
     Optional["_ContextType"],
 ]
-
-class IntelligentGraph(Graph):
-  """An Intelligent RDF Graph, inherited from Graph
-
-  Supports triples with SCRIPT-valued objects, literals of datatype SCRIPT.python. 
-
-  Instead of returning the object literal, the Python script within that literal is executed.
-
-  The Python script can return a scalar, which is interpreted as the node replacement value for the scipt.
-  Alternatively the Pythobn scrript can yield a list of tuples.
-
-  In the event of a script execution error, the error message os returned as the literal value of the object with datatype SCRIPT.error
-  """
-  def handleScript(  self,
-          triple: _TripleSelectorType,
-          _ctx :Optional[_ContextType]=None
-      ) :
-    for s, p, o  in SCRIPT.scriptEvaluator(self,triple=triple,_ctx= _ctx ):
-        if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)):
-            self.handleScript(triple=(s,p,o),_ctx=_ctx )
-        else:
-            yield  (s, p, o )
-
-  def triples(
-          self,
-          triple: _TripleSelectorType,
-      ) -> Generator[_TripleOrTriplePathType, None, None]:
-          """Generator over the triple store
-
-          Returns triples that match the given triple pattern. If triple pattern
-          does not provide a context, all contexts will be searched.
-          """
-          s, p, o = triple
-          if isinstance(p, Path):
-              for _s, _o in p.eval(self, s, o):
-                  yield _s, p, _o    
-          else:
-            for (_s, _p, _o), cg in self.store.triples((s, p, o), context=self):
-              # __store not visible so replaced with store
-              if (isinstance(_o, Literal) and (_o.datatype ==  SCRIPT.python)): 
-                for (ss,pp,oo) in self.handleScript((_s, _p, _o)):
-                    yield (ss,pp,oo)
-              else:
-                yield _s, _p, _o
-
-#_ContextType = IntelligentGraph
-
-class IntelligentConjunctiveGraph(ConjunctiveGraph):
+class Intelligent():
+    _enabled = True
+    _python=URIRef("http://inova8.com/script/python")
+    _error=URIRef("http://inova8.com/script/error")
+    '''
+    def __init__( self):
+        python_type =self._python
+        error_type =self._error
+        if( self._python not in  term._toPythonMapping): term.bind(self._python, str)
+        if( self._error not in  term._toPythonMapping): term.bind(self._error, str)
+    '''
     def handleScript(  self,
           triple: _TripleSelectorType,
           _ctx :Optional[_ContextType]=None
@@ -103,6 +66,65 @@ class IntelligentConjunctiveGraph(ConjunctiveGraph):
                 self.handleScript(triple=(s,p,o),_ctx=_ctx )
             else:
                 yield  (s, p, o )
+    def disableIntelligence(self):
+        self._enabled = False
+    def enableIntelligence(self):
+        self._enabled = True 
+    def isEnabled(self):
+       return self._enabled
+    
+class IntelligentGraph(Intelligent, Graph):
+    """An Intelligent RDF Graph, inherited from Graph
+
+    Supports triples with SCRIPT-valued objects, literals of datatype SCRIPT.python. 
+
+    Instead of returning the object literal, the Python script within that literal is executed.
+
+    The Python script can return a scalar, which is interpreted as the node replacement value for the scipt.
+    Alternatively the Pythobn scrript can yield a list of tuples.
+
+    In the event of a script execution error, the error message os returned as the literal value of the object with datatype SCRIPT.error
+    """
+
+    def __init__( self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        python_type =self._python
+        error_type =self._error
+        if( self._python not in  term._toPythonMapping): term.bind(self._python, str)
+        if( self._error not in  term._toPythonMapping): term.bind(self._error, str)
+
+    def triples(
+            self,
+            triple: _TripleSelectorType,
+        ) -> Generator[_TripleOrTriplePathType, None, None]:
+            """Generator over the triple store
+
+            Returns triples that match the given triple pattern. If triple pattern
+            does not provide a context, all contexts will be searched.
+            """
+            s, p, o = triple
+            if isinstance(p, Path):
+                for _s, _o in p.eval(self, s, o):
+                    yield _s, p, _o    
+            else:
+                for (_s, _p, _o), cg in self.store.triples((s, p, o), context=self):
+                    # __store not visible so replaced with store
+                    if (isinstance(_o, Literal) and (_o.datatype ==  SCRIPT.python) and (self.isEnabled())): 
+                        for (ss,pp,oo) in self.handleScript((_s, _p, _o)):
+                            yield (ss,pp,oo)
+                    else:
+                        yield _s, _p, _o
+
+#_ContextType = IntelligentGraph
+
+class IntelligentConjunctiveGraph(Intelligent,ConjunctiveGraph):
+    def __init__( self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        python_type =self._python
+        error_type =self._error
+        if( self._python not in  term._toPythonMapping): term.bind(self._python, str)
+        if( self._error not in  term._toPythonMapping): term.bind(self._error, str)
+
     def triples(
         self,
         triple_or_quad: _TripleOrQuadSelectorType,
@@ -134,7 +156,7 @@ class IntelligentConjunctiveGraph(ConjunctiveGraph):
                 yield s, p, o
         else:
             for (s, p, o), cg in self.store.triples((s, p, o), context=context):
-              if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)): 
+              if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python) and (self.isEnabled())): 
                 for (ss,pp,oo) in self.handleScript(( s, p, o),cg):
                     yield (ss,pp,oo)
               else:
@@ -175,7 +197,7 @@ class IntelligentConjunctiveGraph(ConjunctiveGraph):
         # type error: Argument 1 to "triples_choices" of "Store" has incompatible type "Tuple[Union[List[Node], Node], Union[Node, List[Node]], Union[Node, List[Node]]]"; expected "Union[Tuple[List[Node], Node, Node], Tuple[Node, List[Node], Node], Tuple[Node, Node, List[Node]]]"
         # type error note: unpacking discards type info
         for (s1, p1, o1), cg in self.store.triples_choices((s, p, o), context=context):  # type: ignore[arg-type]
-            if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)): 
+            if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)and (self.isEnabled())): 
                 for (ss,pp,oo) in self.handleScript((s1, p1, o1),cg):
                     yield (ss,pp,oo) 
             else:
