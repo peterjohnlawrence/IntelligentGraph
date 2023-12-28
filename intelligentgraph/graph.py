@@ -188,5 +188,4 @@ class IntelligentConjunctiveGraph(Intelligent,ConjunctiveGraph):
               yield s1, p1, o1
 
 class IntelligentDataset(IntelligentConjunctiveGraph): 
-  def _me():
-    return None
+  None
