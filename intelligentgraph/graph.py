@@ -40,6 +40,12 @@ _OptionalQuadType = Tuple[
 _TriplePatternType = Tuple[
     Optional["_SubjectType"], Optional["_PredicateType"], Optional["_ObjectType"]
 ]
+_QuadPatternType = Tuple[
+    Optional["_SubjectType"],
+    Optional["_PredicateType"],
+    Optional["_ObjectType"],
+    Optional["_ContextType"],
+]
 
 class IntelligentGraph(Graph):
   """An Intelligent RDF Graph, inherited from Graph
