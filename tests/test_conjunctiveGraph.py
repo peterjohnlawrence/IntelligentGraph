@@ -84,3 +84,34 @@ _result = Literal("_result =1952" ,datatype=SCRIPT.python)
         #assert triple[1]==FOAF.birthday
         print(triple[2])
         assert triple[2].toPython()==1952
+
+def test_circularReference():
+    g = IntelligentConjunctiveGraph()
+    ig = URIRef("http://inova8.com/ig")
+    ig1 = URIRef("http://inova8.com/ig1")
+    ig2 = URIRef("http://inova8.com/ig2")
+    ig3 = URIRef("http://inova8.com/ig3")
+    ig4 = URIRef("http://inova8.com/ig4")
+    g.add((ig, ig1, Literal('''
+from rdflib.namespace import FOAF
+for triple in g.triples( (s , URIRef("http://inova8.com/ig2"), None)):
+    o= triple[2]
+    _result = o''',datatype=SCRIPT.python)))
+    g.add((ig, ig2, Literal('''
+from rdflib.namespace import FOAF
+for triple in g.triples( (s , URIRef("http://inova8.com/ig3"), None)):
+    o= triple[2]
+    _result = o''',datatype=SCRIPT.python)))
+    g.add((ig, ig3, Literal('''
+from rdflib.namespace import FOAF
+for triple in g.triples( (s , URIRef("http://inova8.com/ig4"), None)):
+    o= triple[2]
+    _result = o''',datatype=SCRIPT.python)))
+    g.add((ig, ig4, Literal('''
+from rdflib.namespace import FOAF
+for triple in g.triples( (s , URIRef("http://inova8.com/ig1"), None)):
+    o= triple[2]
+    _result = o''',datatype=SCRIPT.python)))
+    for triple in g.triples( (ig, ig1, None)):
+        print(triple[2])
+        assert triple[2]==Literal("Error=Script circular reference", datatype=SCRIPT.error)

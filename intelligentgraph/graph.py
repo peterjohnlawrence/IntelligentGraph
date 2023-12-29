@@ -48,23 +48,23 @@ _QuadPatternType = Tuple[
 ]
 class Intelligent():
     _enabled = True
-    _python=URIRef("http://inova8.com/script/python")
-    _error=URIRef("http://inova8.com/script/error")
-    def __init__( self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        python_type =self._python
-        error_type =self._error
-        if( self._python not in  term._toPythonMapping): term.bind(self._python, str)
-        if( self._error not in  term._toPythonMapping): term.bind(self._error, str)
+    stack =None
     def handleScript(  self,
           triple: _TripleSelectorType,
-          _ctx :Optional[_ContextType]=None
+          _ctx :Optional[_ContextType]=None,
+          stack:Optional[Graph]=None
       ) :
-        for s, p, o  in self.scriptEvaluator(triple=triple,_ctx= _ctx ):
-            if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)):
-                self.handleScript(triple=(s,p,o),_ctx=_ctx )
-            else:
-                yield  (s, p, o )
+        if(self.stack is None):
+            self.stack=Graph()
+        if (triple in self.stack):
+            yield (triple[0], triple[1] ,Literal("Error=Script circular reference", datatype=SCRIPT.error) )
+        else:
+            self.stack.add(triple)
+            for s, p, o  in self.scriptEvaluator(triple=triple,_ctx= _ctx ):
+                if (isinstance(o, Literal) and (o.datatype ==  SCRIPT.python)):
+                    self.handleScript(triple=(s,p,o),_ctx=_ctx, stack= self.stack )
+                else:
+                    yield  (s, p, o )
     def disableIntelligence(self):
         self._enabled = False
     def enableIntelligence(self):
