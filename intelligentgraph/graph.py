@@ -243,5 +243,5 @@ class IntelligentConjunctiveGraph(Intelligent,ConjunctiveGraph):
             else:
               yield s1, p1, o1
 
-class IntelligentDataset(IntelligentConjunctiveGraph): 
+class IntelligentDataset(Intelligent, Dataset): 
   None
