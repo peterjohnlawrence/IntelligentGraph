@@ -185,9 +185,35 @@ Scripts are any valid Python.
 
 Context is provided to each script in the form of the following variables:
 
-g:
-s:
-p:
+- g: The IntelligentGraph object that contains the triples (or quads). This object can be  
+- s: The subject node of the triple 
+- p: The predicate node of the triple
+- o: The object node of the triple. This node is a literal containing the script.
+- ctx: the context of the triple. In the case of a conjunctive graph or dataset, it is the particular graph dataset that contains the triple.
+
+The result of the script is returned by assigning the value to _result.
+The _result value can be any of the following types:
+- A Python scalar, which will be converted to a corresponding literal scalar
+- A RDFLib Literal
+- A RDFLib URIRef
+- A triple
+- A set of triples, using a generator that yields each triple when requested.
+
+# Controlling Intelligence
+
+The capabilities of an IntelligentGraph to evaluate a script can be disabled with
+
+- IntelligentGraph.disableIntelligence()
+
+After which the IntelligentGraph behaves as a 'normal' RDFLib Graph. RTghis is useful if one wants to, say, serialize the graph.
+
+Intelligence (aka evaluation of scripts) is reenabled with:
+
+- IntelligentGraph.enableIntelligence()
+
+ To check if an IntelligentGraph has intelligence enabled use:
+
+- IntelligentGrapg.isEnabled()
 
 # What next?
 IntelligentGraph opens up all sorts of data analysis capabilities which can now become agents within the graph rather than external code.
