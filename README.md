@@ -19,7 +19,10 @@ Most of the documentation for IntelligentGraph can be found in RDFlib, see https
 4. [Script Writing](#script_writing)
 5. [Controlling Intelligence](#controlling_intelligence)
 6. [What Next?](#what_next)
-7. [Caveats](#caveats)
+   1. [Data Analysis](#data_analysis)
+   2. [Integraion with IoT and IIoT](#integration_with_iot_and_iiot)
+   3. [Integration with Large Language Models (LLMs)](#integration_with_large_language_models_llms)  
+8. [Caveats](#caveats)
 
 # Installation <a name="installation"></a>
 The latest release of RDFLib may be installed with Python's package management tool pip. 
@@ -228,7 +231,7 @@ Intelligence (aka evaluation of scripts) is reenabled with:
 # What Next? <a name="what_next"></a>
 IntelligentGraph opens up all sorts of data analysis capabilities which can now become agents within the graph rather than external code.
 
-## Data Analysis
+## Data Analysis <a name="data_analysis"></a>
 
 Often data analysis is done within a spreadsheet because it is so easy to add calculated columns, as well as aggregate column values. This can be performed just as easily within the IntelligentGraph:
 
@@ -237,11 +240,11 @@ Often data analysis is done within a spreadsheet because it is so easy to add ca
 - Each property of the entity then becomes another column.
 - Aggregations are the properties associated with the class of the individual entities
 
-## Integration with IoT and IIoT
+## Integration with IoT and IIoT  <a name="integration_with_iot_and_iiot"></a>
 
 Internet of Things (IoT) and Industrial Internet of Things (IIoT) provide a source for all sorts of measurements. However, these IoT and IIoT systems often do not understand the context from which these measurements are taken. A graph model of the plant, building, geographical area, etc is the best way to capture that context. But then we are missing the actual measurements. IntelligentGraph allows agents within the context model to pull information in from the IoT or IIoT server just-in-time, rather than pushing as much information as one can into the graph just-in-case. Since these measurements are available within the graph, just like any other asserted triple, analysis agents can also be added to the graph to create a truly intelligent graph.
 
-## Integration with Large Language Models (LLMs)
+## Integration with Large Language Models (LLMs) <a name="integration_with_large_language_models_llms"></a>
 
 Clearly, IntelligentGraph can pull structured data from external systems such as IoT and merge it with the existing asserted graph. LLM (Large Language Models)  such as ChatGPT, Bard, LLama and others have opened up the possibility of merging unstructured data from the world of LLms with the structure of graphs.
 
