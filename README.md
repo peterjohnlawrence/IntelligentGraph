@@ -179,8 +179,18 @@ When queried as an IntelligentGraph, it will appear that the graph contains the 
         <http://inova8.com/fascicled>,
         <http://inova8.com/hangers> .
 ```
+# Script Writing
+
+Scripts are any valid Python. 
+
+Context is provided to each script in the form of the following variables:
+
+g:
+s:
+p:
+
 # What next?
-IntelligentGraph opens up all sorts of data analysis capabilities which can now becomne agents within the graph rather than external code.
+IntelligentGraph opens up all sorts of data analysis capabilities which can now become agents within the graph rather than external code.
 
 ## Data Analysis
 
