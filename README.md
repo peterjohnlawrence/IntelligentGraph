@@ -5,13 +5,23 @@ Python package that adds IntelligentGraph capabilities to RDFLib RDF graph packa
 IntelligentGraph introduces a special Literal value: a SCRIPT. These literals have a datatype of SCRIPT.python.
 When a SCRIPT-valued object is retrieved from the RDF store, the script is executed and the values returned from the execution of the script replace the SCRIPT-valued object.
 
-
-
 # Documentation
 
 Most of the documentation for IntelligentGraph can be found in RDFlib, see https://rdflib.readthedocs.io for its documentation built from the code. 
 
-# Installation
+# Table of Contents
+1. [Installation](#installation)
+2. [Getting Started](#getting_started)
+    1. [Really simple start](#really_simple_start)
+    2. [Let's get a bit more real](#lets_get_a_bit_more_real)
+    3. [Fetching External Data ](#fetching_external_data)
+    4. [Summary](#summary)
+4. [Script Writing](#script_writing)
+5. [Controlling Intelligence](#controlling_intelligence)
+6. [What Next?](#what_next)
+7. [Caveats](#caveats)
+
+# Installation <a name="installation"></a>
 The latest release of RDFLib may be installed with Python's package management tool pip. 
 Since IntelligentGraph depends on rdflib, version >7 of rdflib will be installed.
 However, since IntelligentGraph is still experimental it is loaded directly from GitHub
@@ -22,11 +32,11 @@ Jupyter or Google Colab is a handy way of interacting with graphs. To install fr
 ```python
 !pip install "git+https://github.com/peterjohnlawrence/IntelligentGraph.git"
 ```
-# Getting Started
+# Getting Started <a name="getting_started"></a>
 
 IntelligentGraph follows the same pattern as RDFLib, since IntelligentGraph is derived from Graph. So everything that works for RDFLib works the same for IntelligentGraph.
 
-## Really simple start
+## Really simple start  <a name="really_simple_start"></a>
 
 The simplest example is to create an IntelkligentGraph with a single triple, whose value is a script that returns a literal. the value is return by assigning it to the predefined _result variable. We don't need a script to do this, but let's build up simply:
 ```python
@@ -49,7 +59,7 @@ This returns the single triple result: subject, predicate, object
 ```
 Note that the object's script value has been replaced with a literal containing the xsd:date value that was returned from the script when it was evaluated.
 
-## Let's get a bit more real
+## Let's get a bit more real <a name="lets_get_a_bit_more_real"></a>
 
 If we wanted to know a person's age, we could of course query this graph, and as part of the SPARQL query, or Python code handling the returned values, calculate the age in years. For example 
 ```python
@@ -93,7 +103,7 @@ Which returns the following graph in n3 format. Again, please note that the scri
     foaf:birthday "1951-03-08"^^xsd:date .\n\n
 ```
 
-## Fetching External Data
+## Fetching External Data <a name="fetching_external_data"></a>
 
 There are many occasions when we want to merge a graph with external information. Usually, this is done by running some code that retrieves the triples from the external data source, such as an IoT server. This data then has to be merged with the underlying graph.
 IntelligentGraph offers a better alternative: add an agent *within* the graph that pulls this external data just-in-time, instead of just-in-case.
@@ -143,7 +153,7 @@ print(g.serialize(format="n3"))
         <http://inova8.com/fascicled>,
         <http://inova8.com/hangers> .
 ```
-## Summary
+## Summary <a name="summary"></a>
 
 In this example, the asserted graph only contains three statements, each of which  has a script for an object value:
 ```python
@@ -179,7 +189,7 @@ When queried as an IntelligentGraph, it will appear that the graph contains the 
         <http://inova8.com/fascicled>,
         <http://inova8.com/hangers> .
 ```
-# Script Writing
+# Script Writing <a name="script_writing"></a>
 
 Scripts are any valid Python. 
 
@@ -199,7 +209,7 @@ The _result value can be any of the following types:
 - A triple
 - A set of triples, using a generator that yields each triple when requested.
 
-# Controlling Intelligence
+# Controlling Intelligence <a name="controlling_intelligence"></a>
 
 The capabilities of an IntelligentGraph to evaluate a script can be disabled with
 
@@ -215,7 +225,7 @@ Intelligence (aka evaluation of scripts) is reenabled with:
 
 - IntelligentGrapg.isEnabled()
 
-# What next?
+# What Next? <a name="what_next"></a>
 IntelligentGraph opens up all sorts of data analysis capabilities which can now become agents within the graph rather than external code.
 
 ## Data Analysis
@@ -237,6 +247,6 @@ Clearly, IntelligentGraph can pull structured data from external systems such as
 
 An example Jupyter/Colab notebook demonstrating its use is here: https://github.com/peterjohnlawrence/IntelligentGraph/blob/main/IntelligentGraph%2BLLM.ipynb
 
-# Caveats
+# Caveats <a name="caveats"></a>
 - Scripts are evaluated using the Python exec() function. This can open expose you to malicious attacks if you allow open access to your intelligentGraphs.
 - Is IntelligentGraph fully debugged and tested? No, but to the best of my abilities.
