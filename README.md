@@ -1,17 +1,30 @@
-![](IntelligentGraph.diagrams.gif)
+![](IntelligentGraph.gif)
 # IntelligentGraph
 Python package that adds IntelligentGraph capabilities to RDFLib RDF graph package.
 
 IntelligentGraph introduces a special Literal value: a SCRIPT. These literals have a datatype of SCRIPT.python.
 When a SCRIPT-valued object is retrieved from the RDF store, the script is executed and the values returned from the execution of the script replace the SCRIPT-valued object.
 
-
-
 # Documentation
 
 Most of the documentation for IntelligentGraph can be found in RDFlib, see https://rdflib.readthedocs.io for its documentation built from the code. 
 
-# Installation
+# Table of Contents
+1. [Installation](#installation)
+2. [Getting Started](#getting_started)
+    1. [Really simple start](#really_simple_start)
+    2. [Let's get a bit more real](#lets_get_a_bit_more_real)
+    3. [Fetching External Data ](#fetching_external_data)
+    4. [Summary](#summary)
+4. [Script Writing](#script_writing)
+5. [Controlling Intelligence](#controlling_intelligence)
+6. [What Next?](#what_next)
+   1. [Data Analysis](#data_analysis)
+   2. [Integraion with IoT and IIoT](#integration_with_iot_and_iiot)
+   3. [Integration with Large Language Models (LLMs)](#integration_with_large_language_models_llms)  
+8. [Caveats](#caveats)
+
+# Installation <a name="installation"></a>
 The latest release of RDFLib may be installed with Python's package management tool pip. 
 Since IntelligentGraph depends on rdflib, version >7 of rdflib will be installed.
 However, since IntelligentGraph is still experimental it is loaded directly from GitHub
@@ -22,11 +35,11 @@ Jupyter or Google Colab is a handy way of interacting with graphs. To install fr
 ```python
 !pip install "git+https://github.com/peterjohnlawrence/IntelligentGraph.git"
 ```
-# Getting Started
+# Getting Started <a name="getting_started"></a>
 
 IntelligentGraph follows the same pattern as RDFLib, since IntelligentGraph is derived from Graph. So everything that works for RDFLib works the same for IntelligentGraph.
 
-## Really simple start
+## Really simple start  <a name="really_simple_start"></a>
 
 The simplest example is to create an IntelkligentGraph with a single triple, whose value is a script that returns a literal. the value is return by assigning it to the predefined _result variable. We don't need a script to do this, but let's build up simply:
 ```python
@@ -49,7 +62,7 @@ This returns the single triple result: subject, predicate, object
 ```
 Note that the object's script value has been replaced with a literal containing the xsd:date value that was returned from the script when it was evaluated.
 
-## Let's get a bit more real
+## Let's get a bit more real <a name="lets_get_a_bit_more_real"></a>
 
 If we wanted to know a person's age, we could of course query this graph, and as part of the SPARQL query, or Python code handling the returned values, calculate the age in years. For example 
 ```python
@@ -93,7 +106,7 @@ Which returns the following graph in n3 format. Again, please note that the scri
     foaf:birthday "1951-03-08"^^xsd:date .\n\n
 ```
 
-## Fetching External Data
+## Fetching External Data <a name="fetching_external_data"></a>
 
 There are many occasions when we want to merge a graph with external information. Usually, this is done by running some code that retrieves the triples from the external data source, such as an IoT server. This data then has to be merged with the underlying graph.
 IntelligentGraph offers a better alternative: add an agent *within* the graph that pulls this external data just-in-time, instead of just-in-case.
@@ -143,7 +156,7 @@ print(g.serialize(format="n3"))
         <http://inova8.com/fascicled>,
         <http://inova8.com/hangers> .
 ```
-## Summary
+## Summary <a name="summary"></a>
 
 In this example, the asserted graph only contains three statements, each of which  has a script for an object value:
 ```python
@@ -179,10 +192,46 @@ When queried as an IntelligentGraph, it will appear that the graph contains the 
         <http://inova8.com/fascicled>,
         <http://inova8.com/hangers> .
 ```
-# What next?
-IntelligentGraph opens up all sorts of data analysis capabilities which can now becomne agents within the graph rather than external code.
+# Script Writing <a name="script_writing"></a>
 
-## Data Analysis
+Scripts are any valid Python. 
+
+Context is provided to each script in the form of the following variables:
+
+- g: The IntelligentGraph object that contains the triples (or quads). This object can be  
+- s: The subject node of the triple 
+- p: The predicate node of the triple
+- o: The object node of the triple. This node is a literal containing the script.
+- ctx: the context of the triple. In the case of a conjunctive graph or dataset, it is the particular graph dataset that contains the triple.
+
+The result of the script is returned by assigning the value to _result.
+The _result value can be any of the following types:
+- A Python scalar, which will be converted to a corresponding literal scalar
+- A RDFLib Literal
+- A RDFLib URIRef
+- A triple
+- A set of triples, using a generator that yields each triple when requested.
+
+# Controlling Intelligence <a name="controlling_intelligence"></a>
+
+The capabilities of an IntelligentGraph to evaluate a script can be disabled with
+
+- IntelligentGraph.disableIntelligence()
+
+After which the IntelligentGraph behaves as a 'normal' RDFLib Graph. RTghis is useful if one wants to, say, serialize the graph.
+
+Intelligence (aka evaluation of scripts) is reenabled with:
+
+- IntelligentGraph.enableIntelligence()
+
+ To check if an IntelligentGraph has intelligence enabled use:
+
+- IntelligentGrapg.isEnabled()
+
+# What Next? <a name="what_next"></a>
+IntelligentGraph opens up all sorts of data analysis capabilities which can now become agents within the graph rather than external code.
+
+## Data Analysis <a name="data_analysis"></a>
 
 Often data analysis is done within a spreadsheet because it is so easy to add calculated columns, as well as aggregate column values. This can be performed just as easily within the IntelligentGraph:
 
@@ -191,16 +240,16 @@ Often data analysis is done within a spreadsheet because it is so easy to add ca
 - Each property of the entity then becomes another column.
 - Aggregations are the properties associated with the class of the individual entities
 
-## Integration with IoT and IIoT
+## Integration with IoT and IIoT  <a name="integration_with_iot_and_iiot"></a>
 
 Internet of Things (IoT) and Industrial Internet of Things (IIoT) provide a source for all sorts of measurements. However, these IoT and IIoT systems often do not understand the context from which these measurements are taken. A graph model of the plant, building, geographical area, etc is the best way to capture that context. But then we are missing the actual measurements. IntelligentGraph allows agents within the context model to pull information in from the IoT or IIoT server just-in-time, rather than pushing as much information as one can into the graph just-in-case. Since these measurements are available within the graph, just like any other asserted triple, analysis agents can also be added to the graph to create a truly intelligent graph.
 
-## Integration with Large Language Models (LLMs)
+## Integration with Large Language Models (LLMs) <a name="integration_with_large_language_models_llms"></a>
 
 Clearly, IntelligentGraph can pull structured data from external systems such as IoT and merge it with the existing asserted graph. LLM (Large Language Models)  such as ChatGPT, Bard, LLama and others have opened up the possibility of merging unstructured data from the world of LLms with the structure of graphs.
 
 An example Jupyter/Colab notebook demonstrating its use is here: https://github.com/peterjohnlawrence/IntelligentGraph/blob/main/IntelligentGraph%2BLLM.ipynb
 
-# Caveats
+# Caveats <a name="caveats"></a>
 - Scripts are evaluated using the Python exec() function. This can open expose you to malicious attacks if you allow open access to your intelligentGraphs.
 - Is IntelligentGraph fully debugged and tested? No, but to the best of my abilities.
