@@ -247,11 +247,11 @@ Internet of Things (IoT) and Industrial Internet of Things (IIoT) provide a sour
 
 ## Integration with Large Language Models (LLMs) <a name="integration_with_large_language_models_llms"></a>
 
-Clearly, IntelligentGraph can pull structured data from external systems such as IoT and merge it with the existing asserted graph. LLM (Large Language Models)  such as ChatGPT, Bard, LLama and others have opened up the possibility of merging unstructured data from the world of LLms with the structure of graphs.
+Clearly, IntelligentGraph can pull structured data from external systems such as IoT and merge it with the existing asserted graph. LLM (Large Language Models)  such as ChatGPT, Bard, LLama and others have opened up the possibility of merging unstructured data from the world of LLMs with the structure of graphs.
 
 An example Jupyter/Colab notebook demonstrating its use is here: https://github.com/peterjohnlawrence/IntelligentGraph/blob/main/IntelligentGraph%2BLLM.ipynb
 
 # Caveats <a name="caveats"></a>
 - Scripts are evaluated using the Python exec() function. This can open expose you to malicious attacks if you allow open access to your intelligentGraphs.
 - Is IntelligentGraph fully debugged and tested? No, but to the best of my abilities.
-- IntelligentGraph does not cache retrieved results, ensuring that no results can become stale. However this will come with a performance penalty in some cases.
+- IntelligentGraph does not cache retrieved results, ensuring that no results can become stale. However, this will come with a performance penalty in some cases.
