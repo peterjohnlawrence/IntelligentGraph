@@ -254,3 +254,4 @@ An example Jupyter/Colab notebook demonstrating its use is here: https://github.
 # Caveats <a name="caveats"></a>
 - Scripts are evaluated using the Python exec() function. This can open expose you to malicious attacks if you allow open access to your intelligentGraphs.
 - Is IntelligentGraph fully debugged and tested? No, but to the best of my abilities.
+- IntelligentGraph does not cache retrieved results, ensuring that no results can become stale. However this will come with a performance penalty in some cases.
