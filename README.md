@@ -46,11 +46,11 @@ The simplest example is to create an IntelkligentGraph with a single triple, who
 from  intelligentgraph import IntelligentGraph,SCRIPT
 from rdflib import  Literal,   URIRef
 from rdflib.namespace import FOAF
+from datetime import date
 
 g = IntelligentGraph()
-ig = URIRef("http://inova8.com/ig")
-g.add((ig, FOAF.birthday, Literal('''from datetime import date
-_result =date(1951, 3, 8)''',datatype=SCRIPT.python)))
+iggy = URIRef("http://inova8.com/iggy")
+g.add((iggy, FOAF.birthday, Literal(date(1951, 3, 8))))
 ```
 We can query this graph (with one triple!) as follows:
 ```python
