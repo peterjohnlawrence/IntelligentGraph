@@ -43,6 +43,7 @@ IntelligentGraph follows the same pattern as RDFLib, since IntelligentGraph is d
 
 The simplest example is to create an IntelkligentGraph with a single triple, whose value is a script that returns a literal. the value is return by assigning it to the predefined _result variable. We don't need a script to do this, but let's build up simply:
 ```python
+from  intelligentgraph import IntelligentGraph,SCRIPT
 from rdflib import  Literal,   URIRef
 from rdflib.namespace import FOAF
 
